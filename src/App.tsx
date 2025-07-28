@@ -1,5 +1,5 @@
 // src/App.tsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import RecipeGenerator from './components/RecipeGenerator';
 import RecipeDisplay from './components/RecipeDisplay';
 import FavoritesList from './components/FavoritesList';
@@ -18,7 +18,7 @@ function App() {
   // const EDAMAM_APP_KEY = '8760d97c11848ffdd4874b60e9bec036';
   // const API_ENDPOINT = `https://api.edamam.com/api/recipes/v2?type=public&app_id=${EDAMAM_APP_ID}&app_key=${EDAMAM_APP_KEY}`;
 
-  const [allRecipes, setAllRecipes] = useState<Recipe[]>([]); // Store all fetched recipes
+  const [, setAllRecipes] = useState<Recipe[]>([]); // Store all fetched recipes
   const [currentRecipe, setCurrentRecipe] = useState<Recipe | null>(null); // The recipe currently displayed
   const [favorites, setFavorites] = useState<Recipe[]>(() => {
     const storedFavorites = localStorage.getItem('favoriteRecipes');
