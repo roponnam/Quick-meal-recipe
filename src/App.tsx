@@ -5,7 +5,6 @@ import RecipeDisplay from './components/RecipeDisplay';
 import FavoritesList from './components/FavoritesList';
 import './index.css'; // Your Tailwind CSS import
 import type { Recipe, FilterOptions } from './types'; // Import interfaces
- // Import interfaces
 
 function App() {
   // --- API Configuration (Using TheMealDB for easier demo) ---
@@ -19,20 +18,22 @@ function App() {
   // const EDAMAM_APP_KEY = '8760d97c11848ffdd4874b60e9bec036';
   // const API_ENDPOINT = `https://api.edamam.com/api/recipes/v2?type=public&app_id=${EDAMAM_APP_ID}&app_key=${EDAMAM_APP_KEY}`;
 
-  const [allRecipes, setAllRecipes] = useState<Recipe[]>([]);
-  const [currentRecipe, setCurrentRecipe] = useState<Recipe | null>(null);
+  const [allRecipes, setAllRecipes] = useState<Recipe[]>([]); // Store all fetched recipes
+  const [currentRecipe, setCurrentRecipe] = useState<Recipe | null>(null); // The recipe currently displayed
   const [favorites, setFavorites] = useState<Recipe[]>(() => {
     const storedFavorites = localStorage.getItem('favoriteRecipes');
     return storedFavorites ? JSON.parse(storedFavorites) : [];
   });
-  const [showFavoritesView, setShowFavoritesView] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [showFavoritesView, setShowFavoritesView] = useState<boolean>(false); // State to toggle between generator and favorites
+  const [isLoading, setIsLoading] = useState<boolean>(false); // NEW: Loading state for API calls
+  const [error, setError] = useState<string | null>(null); // NEW: Error state for API calls
 
+  // Persist favorites to local storage
   useEffect(() => {
     localStorage.setItem('favoriteRecipes', JSON.stringify(favorites));
   }, [favorites]);
 
+  // Function to fetch recipes from API based on filters
   const fetchRecipes = async (options: FilterOptions) => {
     setIsLoading(true);
     setError(null);
@@ -82,10 +83,10 @@ function App() {
         });
       }
 
-      setAllRecipes(fetchedRecipes);
+      setAllRecipes(fetchedRecipes); // This line uses allRecipes, fixing TS6133
       if (fetchedRecipes.length > 0) {
         const randomIndex = Math.floor(Math.random() * fetchedRecipes.length);
-        setCurrentRecipe(fetchedRecipes[randomIndex]);
+        setCurrentRecipe(fetchedRecipes[randomIndex]); // Display a random one
       } else {
         setCurrentRecipe(null);
         alert('No recipes found matching your criteria. Try different filters!');
@@ -110,7 +111,7 @@ function App() {
     }
   };
 
-  const handleDislikeRecipe = (recipeToDislike: Recipe) => {
+  const handleDislikeRecipe = () => { // Removed unused recipeToDislike parameter
     fetchRecipes({
       ingredients: (document.getElementById('ingredients') as HTMLInputElement)?.value || '',
       dietary: (document.getElementById('dietary') as HTMLSelectElement)?.value || 'Any',
@@ -136,9 +137,11 @@ function App() {
            backgroundAttachment: 'fixed',
            backgroundColor: '#F5F5DC'
          }}>
+      {/* Header */}
       <header className="bg-orange-600 text-white p-4 shadow-md fixed w-full z-10 rounded-b-lg">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-2xl md:text-3xl font-bold">What's for Dinner?</h1>
+          {/* Future: Add user profile/login */}
         </div>
       </header>
 

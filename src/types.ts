@@ -1,3 +1,5 @@
+// src/types.ts
+
 export interface PreparationMethod { // NEW interface for preparation methods
     method: string;
     temp: string;
